@@ -1,0 +1,43 @@
+server:
+  port: ${PORT:9000}
+  context-path: /uaa
+
+#logging:
+#  level.org.springframework.cloud: DEBUG
+#  level.org.springframework.cloud.sleuth: TRACE
+#  level.org.springframework.cloud.sleuth.log: DEBUG
+#  level.org.springframework.cloud.sleuth.trace: DEBUG
+#  level.org.springframework.cloud.sleuth.instrument.rxjava: DEBUG
+
+#spring.cloud.stream:
+ # binder.rabbit.default.maxConcurrency: 5
+
+spring:
+  sleuth:
+    enabled: true
+# 1.0 means 100%, see http://cloud.spring.io/spring-cloud-sleuth/spring-cloud-sleuth.html#_sampling
+    sampler:
+      percentage: 1.0
+
+  rabbitmq:
+    host: localhost
+    port: 5672
+
+security:
+  encoder:
+    strength: "{cipher}229bc72596895bd8f7ab799f8c9073e3de663b308448bbd8c6ea7c747e105980"
+  client:
+    public:
+      name: public
+    private:
+      name: "{cipher}297b6e6b567dce5bf6a561d20704db808098491ca7a051d8a175e6f4c75d60cb8e4c4264cf67d0590d06131844d6a4eb"
+      password: "{cipher}9ac8b21eb6977382efd105dfdf82e29352e5b00cbcdc434435893a7e932ecbefb68af5bae965a8f8b4a7ced483693db2"
+
+jwt:
+  certificate:
+    store:
+      file: classpath:/certificate/jwt.jks
+      password: "{cipher}17f40d367afc4b9d13b51c4290b1eb7d7e424f74b58268b4812aae93049af1daa3b89afadd4a192111c524c6aa1fe974"
+    key:
+      alias: "{cipher}29420f9ab5bd27e67a900313c49e7b5ec5c150507b06f7005fb61ecefe2c794aa7a072c5662b04ea84a1eefb158600a5"
+      password: "{cipher}17f40d367afc4b9d13b51c4290b1eb7d7e424f74b58268b4812aae93049af1daa3b89afadd4a192111c524c6aa1fe974"

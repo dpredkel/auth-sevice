@@ -1,0 +1,24 @@
+#client eureka settings
+eureka:
+  user:
+    name: "{cipher}6c627b546202f13ffa9e3edf39974a3bfca5d615f58dcbfc23065661968b13c5"
+    password: "{cipher}75efd89c7c4d79220a5b3f35e9ad692a69c820fa0b99e9c48ae9433d45ba016db808ab9dce78382235e529291f8aa0be"
+  instance:
+    preferIpAddress: true
+  client:
+    registerWithEureka: true
+    fetchRegistry: true
+    serviceUrl:
+      defaultZone: http://${eureka.user.name}:${eureka.user.password}@eureka-service:8761/eureka/
+
+spring:
+  datasource:
+    username: "{cipher}1a24755a7a55f36173900de1376a51b2b2752fad3b8bfaf6c2a3265f5ebdf2bf"
+    password: "{cipher}a14232a5a3acd2461286c60caa86151b3fe1bd00991bb6cb13a02812cf325023"
+    url: jdbc:postgresql://auth-db:5432/start_auth
+    driverClassName: org.postgresql.Driver
+  jpa:
+    databasePlatform: org.hibernate.dialect.PostgreSQLDialect
+    showSql: false
+    hibernate:
+      ddlAuto: update

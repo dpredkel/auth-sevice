@@ -1,0 +1,80 @@
+buildscript {
+    ext {
+        springBootVersion = '1.5.9.RELEASE'
+        springCloudVersion = 'Edgware.SR2'
+        dockerPluginVersion = '1.2'
+    }
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+        classpath("se.transmode.gradle:gradle-docker:${dockerPluginVersion}")
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'docker'
+apply plugin: 'eclipse'
+apply plugin: 'org.springframework.boot'
+
+group = 'com.pda'
+
+jar {
+    baseName = 'auth-service'
+    version = 'latest'
+}
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+
+    compile('org.springframework.cloud:spring-cloud-starter-config')
+    compile('org.springframework.cloud:spring-cloud-starter-netflix-eureka-client')
+
+    compile('org.springframework.cloud:spring-cloud-starter-oauth2')
+
+    compile('org.springframework.cloud:spring-cloud-starter-sleuth')
+    compile('org.springframework.cloud:spring-cloud-sleuth-stream')
+    compile('org.springframework.cloud:spring-cloud-starter-stream-rabbit')
+//    compile "io.dropwizard.metrics:metrics-core"
+//    compile "io.dropwizard.metrics:metrics-graphite"
+
+    compile('org.springframework.boot:spring-boot-starter-data-jpa')
+    runtime('org.postgresql:postgresql')
+//    compile('org.flywaydb:flyway-core')
+
+    compileOnly('org.projectlombok:lombok')
+
+//	  testCompile('org.springframework.boot:spring-boot-starter-test')
+//	  testCompile('org.springframework.security:spring-security-test')
+}
+
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+    }
+}
+
+eclipse {
+    classpath {
+        containers.remove('org.eclipse.jdt.launching.JRE_CONTAINER')
+        containers 'org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8'
+    }
+}
+
+task buildDocker(type: Docker, dependsOn: build) {
+    push = false
+    applicationName = jar.baseName
+    dockerfile = file('src/main/docker/Dockerfile')
+    doFirst {
+        copy {
+            from jar
+            into stageDir
+        }
+    }
+}

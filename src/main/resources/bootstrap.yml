@@ -1,0 +1,29 @@
+spring:
+  application:
+    name: auth-service
+  cloud:
+    config:
+      failFast: true
+      username: "{cipher}6c627b546202f13ffa9e3edf39974a3bfca5d615f58dcbfc23065661968b13c5"
+      password: "{cipher}00c58dd052b4cc84df302495a0a704fa259ffde549421461fbf39e510a01ff2948972715f4c251c402c3046de81eaf02"
+#      discovery:
+#        enabled: true
+#        serviceId: auth-service
+
+---
+spring:
+  profiles: local
+  cloud:
+    config:
+#      discovery:
+#        serviceId: config-service
+#        enabled: true
+#      uri: https://localhost:8888
+      uri: http://127.0.0.1:8888
+
+---
+spring:
+  profiles: dev
+  cloud:
+    config:
+      uri: http://config-service:8888
